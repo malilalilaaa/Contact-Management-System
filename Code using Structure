@@ -1,0 +1,369 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+
+# define  Max  1000
+
+const string PASSWORD = "L75M09";
+
+struct Contacts
+{
+	string cName;
+	int cGender = 1 ;
+	int cAge = 0 ;
+	string cPhone;
+	string cAdd;
+	string cID;
+	bool isVIP;
+};
+
+
+struct ContactBooks
+{
+	Contacts contactsArry[Max];
+	int aCount = 0 ;
+};
+
+
+void showMenu()
+{
+	cout << "                                       " << endl;
+	cout << "         Contact Management System     " << endl;
+	cout << "        ===========================    " << endl;
+	cout << "       1. Add contacts  " << endl;
+	cout << "       2. display contacts  " << endl;
+	cout << "       3. Delete contacts  " << endl;
+	cout << "       4. Find contact  " << endl;
+	cout << "       5. Modify contacts  " << endl;
+	cout << "       6. VIP Customers " << endl;
+	cout << "       7. Clear contacts   " << endl;
+	cout << "       0. exit contact book  " << endl;
+
+}
+
+void AddContacts(ContactBooks* cbs)
+{
+	if (cbs->aCount == Max)
+	{
+		cout << " The address book is full and cannot be added! " << endl;
+		return;
+	}
+	else
+	{
+		string name;
+		cout << " Please enter Customer name: " << endl;
+		cin >> name;
+		cbs->contactsArry[cbs->aCount].cName = name;
+
+
+		int gender;
+		cout << " Please enter Customer's gender: " << endl;
+		cout << "1 Male" << endl;
+		cout << "2 Female  " << endl;
+
+		while (true)
+		{
+			cin >> gender;
+			if (gender == 1 || gender == 2)
+			{
+				cbs->contactsArry[cbs->aCount].cGender = gender;
+				break;
+			}
+			cout << " Input error, please re-enter! " << endl;
+		}
+
+		int age;
+		cout << " Please enter Customer's age: " << endl;
+		cin >> age;
+		cbs->contactsArry[cbs->aCount].cAge = age;
+
+		
+		string phone;
+		cout << " Please enter the Customer's phone number: " << endl;
+		cin >> phone;
+		cbs->contactsArry[cbs->aCount].cPhone = phone;
+
+		string add;
+		cout << " Please enter Customer's address: " << endl;
+		cin >> add;
+		cbs->contactsArry[cbs->aCount].cAdd = add;
+
+		string Id;
+		cout << "Please Enter Customer's ID : " << endl;
+		cin >> Id;
+		cbs->contactsArry[cbs->aCount].cID = Id;
+
+		string vipOption;
+        cout << "Is the customer a VIP (Y/N)? ";
+        cin >> vipOption;
+        cbs->contactsArry[cbs->aCount].isVIP = (vipOption == "Y" || vipOption == "y");
+
+
+		cbs->aCount += 1;
+		cout << " Added successfully! " << endl;
+		system("pause");
+
+		system("cls");
+	}
+
+}
+
+
+void ShowContacts(ContactBooks* cbs)
+{
+	if (cbs->aCount == 0)
+	{
+		cout << " No contact, please add it first! " << endl;
+	}
+	else
+	{
+		for (int i = 0; i < cbs->aCount; i++)
+		{
+			cout << "Name: " << cbs->contactsArry[i].cName << endl;
+    cout << "Gender: " << (cbs->contactsArry[i].cGender != 2 ? "Male" : "Female") << endl;
+    cout << "Age: " << cbs->contactsArry[i].cAge << endl;
+    cout << "Telephone: " << cbs->contactsArry[i].cPhone << endl;
+    cout << "Address: " << cbs->contactsArry[i].cAdd << endl;
+    cout << "ID: " << cbs->contactsArry[i].cID << endl;
+		}
+	}
+	system("pause");
+	system("cls");
+}
+
+int IsExist(ContactBooks* cbs, string name)
+{
+	for (int i = 0; i < cbs->aCount; i++)
+	{
+		if (cbs->contactsArry[i].cName == name)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void DeleteContacts(ContactBooks* cbs)
+{
+	string name;
+	cout << " Please enter the name of the user you want to delete: " << endl;
+	cin >> name;
+	int index = IsExist(cbs, name);
+	if (index > -1)
+	{
+		for (int i = index; i < cbs->aCount - 1; i++)
+		{
+			Contacts temp = cbs->contactsArry[i];
+			cbs->contactsArry[i] = cbs->contactsArry[i + 1];
+			cbs->contactsArry[i + 1] = temp;
+		}
+		cbs->aCount--;
+		cout << " Delete successfully! " << endl;
+	}
+	else
+	{
+		cout << " No such person found " << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void GetContacts(ContactBooks* cbs)
+{
+	string name;
+	cout << " Please enter the name of the user you are looking for " << endl;
+	cin >> name;
+	int index = IsExist(cbs, name);
+	if (index > -1)
+	{
+		cout << "Customer's Name: " << cbs->contactsArry[index].cName << endl;
+cout << "Customer's Gender: " << (cbs->contactsArry[index].cGender != 2 ? "Male":"Female") << endl;
+cout << "Customer's Age: " << cbs->contactsArry[index].cAge << endl;
+cout << "Customer's Phone: " << cbs->contactsArry[index].cPhone << endl;
+cout << "Customer's Address: " << cbs->contactsArry[index].cAdd << endl;
+cout << "Customer's ID: " << cbs->contactsArry[index].cID << endl;
+
+	}
+	else
+	{
+		cout << " No such person found " << endl;
+	}
+	system("pause");
+	system("cls");
+
+}
+
+void ModefyContacts(ContactBooks* cbs)
+{
+	string name;
+	cout << " Please enter the user name you want to modify " << endl;
+	cin >> name;
+	int index = IsExist(cbs, name);
+	if (index > -1)
+	{
+		string name;
+		cout << " Please enter the modified name: " << endl;
+		cin >> name;
+		cbs->contactsArry[index].cName = name;
+
+		
+		int gender;
+		cout << " Please enter the modified gender: " << endl;
+		cout << "1 Male " << endl;
+		cout << "2 Female " << endl;
+
+		while (true)
+		{
+			cin >> gender;
+			if (gender == 1 || gender == 2)
+			{
+				cbs->contactsArry[index].cGender = gender;
+				break;
+			}
+			cout << " Input error, please re-enter! " << endl;
+		}
+
+		int age;
+		cout << " Please enter the modified age: " << endl;
+		cin >> age;
+		cbs->contactsArry[index].cAge = age;
+
+		string phone;
+		cout << " Please enter the modified phone number: " << endl;
+		cin >> phone;
+		cbs->contactsArry[index].cPhone = phone;
+
+		string add;
+		cout << " Please enter the modified address: " << endl;
+		cin >> add;
+		cbs->contactsArry[index].cAdd = add;
+
+		string Id;
+		cout << "Please Enter Customer's ID : " << endl;
+		cin >> Id;
+		cbs->contactsArry[cbs->aCount].cID = Id;
+
+		cout << " Modified successfully! " << endl;
+	}
+	else
+	{
+		cout << " No such person found " << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void ShowVIPMembers(const ContactBooks* cbs)
+{
+    cout << "VIP Members:" << endl;
+
+    for (int i = 0; i < cbs->aCount; i++)
+    {
+        if (cbs->contactsArry[i].isVIP)
+        {
+            cout << "Name: " << cbs->contactsArry[i].cName << endl;
+            cout << "Gender: " <<  (cbs->contactsArry[i].cGender != 2 ? "Male":"Female") << endl;
+            cout << "Age: " << cbs->contactsArry[i].cAge << endl;
+            cout << "Phone: " << cbs->contactsArry[i].cPhone << endl;
+            cout << "Address: " << cbs->contactsArry[i].cAdd << endl;
+            cout << "ID: " << cbs->contactsArry[i].cID << endl;
+            cout << "VIP Status: Yes" << endl;
+            cout << endl;
+        }
+    }
+    system("pause");
+	system("cls");
+}
+
+void ClearContacts(ContactBooks* cbs)
+{
+	string choose = "N";
+	cout << " Are you sure you want to clear the address book? (Y to confirm/N to cancel) " << endl;
+
+	while (true)
+	{
+		cin >> choose;
+		if (choose == "Y" || choose == "N")
+		{
+			break;
+		}
+		else
+		{
+			cout << " Input is wrong, please re-enter!! " << endl;
+		}
+	}
+
+	if (choose == "Y")
+	{
+		cbs->aCount = 0;
+		cout << " Empty successfully!! " << endl;
+	}
+	else
+	{
+		cout << " Operation canceled!! " << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+
+int main()
+{
+    string enteredPassword;
+
+    cout << "Enter the password: ";
+    getline(cin, enteredPassword);
+
+    if (enteredPassword != PASSWORD)
+    {
+        cout << "Invalid password. Access denied." << endl;
+        return 0;
+    }
+	int select = 0;
+	ContactBooks cbs;
+	cbs.aCount = 0;
+
+	while (true)
+	{
+		showMenu();
+
+		cin >> select;
+		switch (select)
+		{
+		case  1 :
+			AddContacts (& cbs );	
+			break;
+		case  2 : 
+			ShowContacts (& cbs ); 
+			break;
+		case  3 : 
+			DeleteContacts(&cbs);
+			break;
+		case  4 : 
+			GetContacts(&cbs);
+			break;
+		case  5 : 
+			ModefyContacts(&cbs);
+			break;
+			case  6 : 
+			ShowVIPMembers(&cbs);
+			break;
+		case  7 : 
+			ClearContacts(&cbs);
+			break;
+			
+		case  0 : 
+			cout << " Welcome to use next time, goodbye! " << endl;
+			system("pause");
+			return 0;
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	system ( " pause " ); 
+	return 0;
+}
